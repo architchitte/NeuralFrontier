@@ -1,10 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import yfinance as yf
-import numpy as np
-import tensorflow as tf
+from ml_engine import VolatilityPredictor
+import logging
 
-app = FastAPI(title="Crypto Volatility Prediction API")
+app = FastAPI(title="Neural Frontier API")
 
 app.add_middleware(
     CORSMiddleware,
@@ -14,18 +13,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+ml_engine = None
+
+@app.on_event("startup")
+def startup_event():
+    global ml_engine
+    logging.info("Initializing ML Engine and preloading TensorFlow models...")
+    # This will load .h5 models into memory synchronously before startup completes
+    ml_engine = VolatilityPredictor()
+
 @app.get("/")
 def read_root():
     return {"message": "Crypto Volatility Prediction System Active"}
 
-@app.get("/predict/{symbol}")
-def predict_volatility(symbol: str):
-    # Dummy implementation for prediction
-    # Normally we would load a model from the models/ directory
-    # model = tf.keras.models.load_model(f"models/{symbol}.h5")
-    
-    return {
-        "symbol": symbol,
-        "prediction": {"volatility_score": np.random.uniform(0.1, 0.9)},
-        "status": "success"
-    }
+@app.get("/predict/{ticker}")
+def predict_volatility(ticker: str):
+    return ml_engine.predict(ticker)
+
+@app.get("/api/history/{ticker}")
+def get_history(ticker: str):
+    return ml_engine.predict_hourly_history(ticker)
+
+@app.get("/api/markets/summary")
+async def get_markets_summary():
+    return await ml_engine.get_markets_summary()
