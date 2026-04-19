@@ -44,7 +44,6 @@ MANIFEST
 htmlcov/
 
 # Build artifacts and Models
-backend/models/*.h5
 backend/.pytest_cache/
 frontend/dist/
 
