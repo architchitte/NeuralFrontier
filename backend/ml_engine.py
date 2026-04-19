@@ -10,9 +10,10 @@ class VolatilityPredictor:
     def __init__(self):
         self.models = {}
         target_tickers = ["BTC", "ETH", "SOL", "ADA"]
+        # Use absolute path relative to this file to ensure reliability in production (Render/Vercel)
+        base_dir = os.path.dirname(os.path.abspath(__file__))
         for ticker in target_tickers:
-            model_path = os.path.join("models", f"{ticker.lower()}_inr_volatility_model.h5")
-            # No safeguards as explicitly requested
+            model_path = os.path.join(base_dir, "models", f"{ticker.lower()}_inr_volatility_model.h5")
             self.models[ticker] = tf.keras.models.load_model(model_path)
 
     def predict(self, ticker: str):
