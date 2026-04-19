@@ -76,7 +76,7 @@ export default function RegimeChart({ selectedTicker }) {
         </div>
       </div>
       
-      <div className="flex-grow relative min-h-[300px]">
+      <div className="relative h-[350px] w-full mt-4">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 20, right: 0, left: 0, bottom: 0 }}>
             {/* Embedded Definitions mapping to Recharts engine for SVGs */}
