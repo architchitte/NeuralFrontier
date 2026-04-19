@@ -5,7 +5,6 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 import tensorflow as tf
-import tf_keras
 
 class VolatilityPredictor:
     def __init__(self):
@@ -15,7 +14,7 @@ class VolatilityPredictor:
         base_dir = os.path.dirname(os.path.abspath(__file__))
         for ticker in target_tickers:
             model_path = os.path.join(base_dir, "models", f"{ticker.lower()}_inr_volatility_model.h5")
-            self.models[ticker] = tf_keras.models.load_model(model_path)
+            self.models[ticker] = tf.keras.models.load_model(model_path)
 
     def predict(self, ticker: str):
         ticker = ticker.upper()

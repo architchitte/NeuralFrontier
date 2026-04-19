@@ -1,6 +1,4 @@
 import os
-# Force TensorFlow to use the legacy Keras 2 behavior for model compatibility
-os.environ["TF_USE_LEGACY_KERAS"] = "1"
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
