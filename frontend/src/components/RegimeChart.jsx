@@ -10,7 +10,8 @@ export default function RegimeChart({ selectedTicker }) {
     let isMounted = true;
     setIsLoading(true);
     
-    axios.get(`http://localhost:8000/api/history/${selectedTicker}`)
+    const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+    axios.get(`${API_BASE}/api/history/${selectedTicker}`)
       .then(res => {
         if (isMounted) {
           setData(res.data);

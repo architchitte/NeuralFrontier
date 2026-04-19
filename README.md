@@ -1,7 +1,5 @@
 # Neural Frontier // Institutional Volatility Forecasting
 
-![Neural Frontier Header](https://lh3.googleusercontent.com/aida-public/AB6AXuABK5gCVhFizvKyk_b8OgR2UR_aFQmg56o-e1u7MX5_td-XvoW21g4S0zUzsaD_UUmx3zujPW2VZ9n34HtODwJ872SzQl2V5rHj0rzc3fsUCi-o-ujbwF0R1ydik62NDu2qdYp7hI4uuEHcMCnywIT4kInM6-pPZtywgN_TOU6CPDFt70tfVM3x-QYoIwnMs4boWc6errt_c6I8IGnQKAHaxdotl2ocRwxjzXIzvuR1NxDizOpaLNT9rYYDRT28XJGBtXaGursOCYw)
-
 Neural Frontier is an institutional-grade predictive analytics platform engineered for decentralized volatility regime isolation. By combining high-frequency market telemetry with a multi-asset LSTM (Long Short-Term Memory) mesh, the platform provides probabilistic strategic maps for Tier-1 cryptographic assets.
 
 ---

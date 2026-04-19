@@ -18,7 +18,8 @@ export default function Dashboard() {
     // Pulse animation logic: always show loading for at least a brief moment for transition smoothness
     setIsLoading(true);
     
-    axios.get(`http://localhost:8000/predict/${selectedTicker}`)
+    const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+    axios.get(`${API_BASE}/predict/${selectedTicker}`)
       .then(res => {
         if (isMounted) {
           setPredictionData(res.data);

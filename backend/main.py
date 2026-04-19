@@ -1,13 +1,21 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from ml_engine import VolatilityPredictor
 import logging
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI(title="Neural Frontier API")
 
+# Configure CORS for production
+frontend_url = os.getenv("FRONTEND_URL", "*")
+origins = [frontend_url, "http://localhost:5173", "http://localhost:3000"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins if frontend_url != "*" else ["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

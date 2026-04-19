@@ -11,8 +11,8 @@ export default function Markets() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    let isMounted = true;
-    axios.get('http://localhost:8000/api/markets/summary')
+    const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+    axios.get(`${API_BASE}/api/markets/summary`)
       .then(res => {
         if (isMounted) {
           setMarketData(res.data);
