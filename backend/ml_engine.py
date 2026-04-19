@@ -6,15 +6,35 @@ import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 import tensorflow as tf
 
+# Robust Keras 3 compatibility wrappers to strip unrecognized metadata
+class SafeDense(tf.keras.layers.Dense):
+    @classmethod
+    def from_config(cls, config):
+        config.pop('quantization_config', None)
+        return super().from_config(config)
+
+class SafeInputLayer(tf.keras.layers.InputLayer):
+    @classmethod
+    def from_config(cls, config):
+        config.pop('optional', None)
+        return super().from_config(config)
+
 class VolatilityPredictor:
     def __init__(self):
         self.models = {}
         target_tickers = ["BTC", "ETH", "SOL", "ADA"]
-        # Use absolute path relative to this file to ensure reliability in production (Render/Vercel)
+        # Intercept deserialization with custom objects to handle version mismatch
+        custom_hooks = {'Dense': SafeDense, 'InputLayer': SafeInputLayer}
         base_dir = os.path.dirname(os.path.abspath(__file__))
+        
         for ticker in target_tickers:
             model_path = os.path.join(base_dir, "models", f"{ticker.lower()}_inr_volatility_model.keras")
-            self.models[ticker] = tf.keras.models.load_model(model_path)
+            # Using compile=False as weight loading is priority over training config
+            self.models[ticker] = tf.keras.models.load_model(
+                model_path, 
+                custom_objects=custom_hooks,
+                compile=False
+            )
 
     def predict(self, ticker: str):
         ticker = ticker.upper()
