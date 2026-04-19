@@ -44,6 +44,8 @@ MANIFEST
 htmlcov/
 
 # Build artifacts and Models
+backend/models/*.h5
+# Note: .keras format files ARE tracked for deployment
 backend/.pytest_cache/
 frontend/dist/
 

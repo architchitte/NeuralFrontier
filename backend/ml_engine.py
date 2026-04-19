@@ -13,7 +13,7 @@ class VolatilityPredictor:
         # Use absolute path relative to this file to ensure reliability in production (Render/Vercel)
         base_dir = os.path.dirname(os.path.abspath(__file__))
         for ticker in target_tickers:
-            model_path = os.path.join(base_dir, "models", f"{ticker.lower()}_inr_volatility_model.h5")
+            model_path = os.path.join(base_dir, "models", f"{ticker.lower()}_inr_volatility_model.keras")
             self.models[ticker] = tf.keras.models.load_model(model_path)
 
     def predict(self, ticker: str):
