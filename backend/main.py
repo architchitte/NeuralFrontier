@@ -10,13 +10,17 @@ load_dotenv()
 
 app = FastAPI(title="Neural Frontier API")
 
-# Configure CORS for production
-frontend_url = os.getenv("FRONTEND_URL", "*")
-origins = [frontend_url, "http://localhost:5173", "http://localhost:3000"]
+# CORS Configuration - allow the specific Vercel frontend URL
+frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173").rstrip("/")
+origins = [
+    frontend_url,
+    "https://neural-frontier.vercel.app",  # Fallback for the current live URL
+    "http://localhost:5173",
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins if frontend_url != "*" else ["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
