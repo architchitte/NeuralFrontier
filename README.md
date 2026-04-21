@@ -44,13 +44,22 @@ cd backend
 
 # Initialize venv
 python -m venv venv
-source venv/bin/activate # or .\venv\Scripts\activate on Windows
+
+# Activate venv
+# On Windows (PowerShell):
+.\venv\Scripts\activate
+# On Unix or MacOS:
+source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
 
 # Run server
+# Option A: After activation
 uvicorn main:app --reload --port 8000
+
+# Option B: One-liner (Windows)
+.\venv\Scripts\python -m uvicorn main:app --reload --port 8000
 ```
 
 ### Frontend Deployment

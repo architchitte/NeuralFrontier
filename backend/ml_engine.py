@@ -28,7 +28,7 @@ class VolatilityPredictor:
         base_dir = os.path.dirname(os.path.abspath(__file__))
         
         for ticker in target_tickers:
-            model_path = os.path.join(base_dir, "models", f"{ticker.lower()}_inr_volatility_model.keras")
+            model_path = os.path.join(base_dir, "models", f"{ticker.lower()}_inr_volatility_model.h5")
             # Using compile=False as weight loading is priority over training config
             self.models[ticker] = tf.keras.models.load_model(
                 model_path, 
@@ -43,9 +43,9 @@ class VolatilityPredictor:
         
         yf_ticker = f"{ticker}-INR"
         
-        # Download 90 days of daily data
+        # Download 120 days of daily data to ensure 60 valid rows after rolling window
         tkr = yf.Ticker(yf_ticker)
-        data = tkr.history(period="90d", interval="1d")
+        data = tkr.history(period="120d", interval="1d")
         
         # Calculate daily returns
         data['Returns'] = data['Close'].pct_change()
@@ -58,6 +58,7 @@ class VolatilityPredictor:
         
         # Isolate the last 60 days
         if len(data) < 60:
+            print(f"DEBUG: Found only {len(data)} rows for {ticker} after dropna. Need 60.")
             raise ValueError("Not enough data to create 60-day sequence after rolling window and dropna.")
             
         sequence_data = data.tail(60)[['Close', 'Volume', 'Volatility_30d']]
@@ -157,7 +158,7 @@ class VolatilityPredictor:
         
         def fetch_ticker(t):
             tkr = yf.Ticker(f"{t}-INR")
-            return t, tkr.history(period="90d", interval="1d")
+            return t, tkr.history(period="120d", interval="1d")
 
         tasks = [asyncio.to_thread(fetch_ticker, t) for t in tickers]
         results = await asyncio.gather(*tasks)

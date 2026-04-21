@@ -1,6 +1,7 @@
 import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from ml_engine import VolatilityPredictor
 import logging
@@ -10,12 +11,12 @@ load_dotenv()
 
 app = FastAPI(title="Neural Frontier API")
 
-# CORS Configuration - allow the specific Vercel frontend URL
-frontend_url = os.getenv("FRONTEND_URL", "http://localhost:5173").rstrip("/")
+# CORS Configuration - Development Mode
 origins = [
-    frontend_url,
-    "https://neural-frontier.vercel.app",  # Fallback for the current live URL
     "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
 ]
 
 app.add_middleware(
@@ -25,6 +26,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+from fastapi import HTTPException
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request, exc):
+    logging.error(f"Global Exception: {str(exc)}", exc_info=True)
+    return JSONResponse(
+        status_code=500,
+        content={"error": "Internal Server Error", "detail": str(exc)},
+    )
 
 ml_engine = None
 

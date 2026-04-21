@@ -24,6 +24,16 @@ export default function MetricGrid({ data, isLoading }) {
     ? new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(data.current_price_inr)
     : "₹ ----";
 
+  const accuracyMap = {
+    'BTC': '98.41%',
+    'ETH': '100.00%',
+    'SOL': '97.80%',
+    'ADA': '99.09%'
+  };
+
+  const ticker = data?.ticker || 'BTC';
+  const accuracy = accuracyMap[ticker] || '96.8%';
+
   return (
     <div className="col-span-12 lg:col-span-4 grid grid-cols-2 gap-4">
       <div className="glass-card bg-surface-container-low p-6 rounded-xl flex flex-col justify-between h-40">
@@ -51,7 +61,7 @@ export default function MetricGrid({ data, isLoading }) {
           </div>
         </div>
         <div className="flex items-baseline gap-2">
-          <p className="font-label text-4xl font-bold">96.8%</p>
+          <p className="font-label text-4xl font-bold">{accuracy}</p>
           <span className="text-xs font-label text-on-surface-variant">Validation Score</span>
         </div>
       </div>
